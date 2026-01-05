@@ -1,7 +1,11 @@
+import { faker } from '@faker-js/faker';
+
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <p></p>
+    </div>
   )
 }
 
