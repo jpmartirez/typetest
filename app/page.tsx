@@ -11,13 +11,23 @@ const Page = () => {
     setWords(faker.word.words(40))
   }, [])
 
+  const getCharClass = (char: string, index: number) => {
+    if (!inputChar[index]) return 'text-gray-400';
+    if (inputChar[index] === char) return 'text-green-400';
+    return 'text-red-500';
+  }
+
   return (
     <div className="max-w-7xl mx-auto h-screen flex items-center justify-center ">
       <div className="relative w-full">
         {/* Target text */}
-        <p className="text-3xl font-semibold leading-relaxed text-gray-400 select-none">
-          {words}
-        </p>
+        <div className="text-3xl font-semibold leading-relaxed select-none flex flex-wrap ">
+          {words.split('').map((char, index)=>(
+            <span key={index} className={`${getCharClass(char, index)}`}>
+              {char === " " ? '\u00A0' : char}
+            </span>
+          ))}
+        </div>
 
         {/* Overlay typing area */}
         <textarea
@@ -37,8 +47,6 @@ const Page = () => {
             text-transparent caret-red-800
 
             outline-none
-
-   
           "
         />
       </div>
