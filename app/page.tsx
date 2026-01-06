@@ -19,7 +19,7 @@ const Page = () => {
 
   return (
     <div className="">
-      <div className="w-full flex flex-col items-center max-w-7xl mx-auto">
+      <div className="w-full flex flex-col items-center max-w-7xl mx-auto gap-10">
 
         {/* Target text */}
         <div className='max-w-7xl mx-auto h-auto'>
@@ -31,8 +31,9 @@ const Page = () => {
         </div>
         
         {/* INPUT */}
-        <div className='w-full'>
-          <textarea className="textarea textarea-secondary w-full text-3xl font-bold"></textarea>
+        <div className='w-full flex flex-col gap-5'>
+          <p className='text-secondary text-lg'>Type here</p>
+          <textarea value={inputChar} onChange={e=>setInputChar(e.target.value)} className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
         </div>
 
         
