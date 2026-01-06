@@ -21,6 +21,16 @@ const Page = () => {
     <div className="">
       <div className="w-full flex flex-col items-center max-w-7xl mx-auto gap-10">
 
+        {/* Config */}
+        <div className='p-2 bg-base-200 rounded-xl'>
+          <form className="filter">
+            <input className="btn btn-square" type="reset" value="×"/>
+            <input className="btn" type="radio" name="frameworks" aria-label="15"/>
+            <input className="btn" type="radio" name="frameworks" aria-label="30"/>
+            <input className="btn" type="radio" name="frameworks" aria-label="60"/>
+          </form>
+        </div>
+
         {/* Target text */}
         <div className='max-w-7xl mx-auto h-auto'>
           <p className='font-bold text-3xl w-full flex flex-wrap'>{words.split("").map((char, index)=>(
