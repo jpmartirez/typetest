@@ -18,37 +18,24 @@ const Page = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto h-screen flex items-center justify-center ">
-      <div className="relative w-full">
+    <div className="">
+      <div className="w-full flex flex-col items-center max-w-7xl mx-auto">
+
         {/* Target text */}
-        <div className="text-3xl font-semibold leading-relaxed select-none flex flex-wrap ">
-          {words.split('').map((char, index)=>(
-            <span key={index} className={`${getCharClass(char, index)}`}>
-              {char === " " ? '\u00A0' : char}
+        <div className='max-w-7xl mx-auto h-auto'>
+          <p className='font-bold text-3xl w-full flex flex-wrap'>{words.split("").map((char, index)=>(
+            <span className={`${getCharClass(char, index)}`} key={index}>
+              {char === " "? "\u00A0" : char }
             </span>
-          ))}
+          ))}</p>
+        </div>
+        
+        {/* INPUT */}
+        <div className='w-full'>
+          <textarea className="textarea textarea-secondary w-full text-3xl font-bold"></textarea>
         </div>
 
-        {/* Overlay typing area */}
-        <textarea
-          value={inputChar}
-          onChange={(e) => setInputChar(e.target.value)}
-          autoFocus
-          spellCheck={false}
-          rows={1}
-          className="
-            absolute top-0 left-0
-            w-full
-            h-full
-            bg-transparent
-            resize-none
-
-            text-3xl font-semibold leading-relaxed
-            text-transparent caret-red-800
-
-            outline-none
-          "
-        />
+        
       </div>
     </div>
   )
