@@ -9,6 +9,8 @@ const Page = () => {
   const [time, setTime] = useState(0);
   const [counter, setCounter] = useState(0);
   const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(0)
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
   if (!running || counter <= 0) return;
@@ -47,9 +49,22 @@ const Page = () => {
 
     for (let i = 0; i < 50; i++ ) if (originalWords[i] === inputWords[i]) count++;
     
-    console.log(count)
-    console.log(count/(time/60))
+    const wpm = count / (time/60)
 
+    setResult(wpm)
+
+    setShowModal(true);
+
+  }
+
+  const resetTest = () => {
+    setWords(faker.word.words(50));
+    setInputChar('');
+    setTime(0);
+    setCounter(0);
+    setRunning(false);
+    setResult(0);
+    setShowModal(false);
   }
 
   return (
@@ -66,9 +81,9 @@ const Page = () => {
             <p className='text-center font-semibold'>Time</p>
             <form className="filter">
               <input className="btn btn-square" type="reset" value="×" onClick={()=>{setCounter(0); setTime(0); setRunning(false)}}/>
-              <input className="btn" onChange={()=>{setCounter(15); setTime(15); setRunning(false)}} type="radio" name="frameworks" aria-label="15"/>
-              <input className="btn" onChange={()=>{setCounter(30); setTime(30); setRunning(false)}} type="radio" name="frameworks" aria-label="30"/>
-              <input className="btn" onChange={()=>{setCounter(60); setTime(60); setRunning(false)}} type="radio" name="frameworks" aria-label="60"/>
+              <input className="btn" onClick={()=>{setCounter(15); setTime(15); setRunning(false)}} type="radio" name="frameworks" aria-label="15"/>
+              <input className="btn" onClick={()=>{setCounter(30); setTime(30); setRunning(false)}} type="radio" name="frameworks" aria-label="30"/>
+              <input className="btn" onClick={()=>{setCounter(60); setTime(60); setRunning(false)}} type="radio" name="frameworks" aria-label="60"/>
             </form>
           </div>
         )}
@@ -93,8 +108,23 @@ const Page = () => {
             } className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
 
 
-          {counter === 0 && <p className='w-full text-center'>Choose your time before typing</p>}
+          {counter < 1  && <p className='w-full text-center'>Choose your time before typing</p>}
         </div>
+
+        {/* Show Modal Results */}
+        {/* Open the modal using document.getElementById('ID').showModal() method */}
+        <dialog id="my_modal_1" className={`modal ${showModal && 'modal-open'}`}>
+          <div className="modal-box">
+            <h3 className="font-bold text-3xl text-center text-purple-400">Your WPM</h3>
+            <p className="py-4 text-center font-bold text-2xl">{result} words per minute</p>
+            <div className="modal-action flex items-center justify-center">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn" onClick={resetTest}>Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
         
       </div>
     </div>
