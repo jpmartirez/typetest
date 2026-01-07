@@ -8,9 +8,10 @@ const Page = () => {
   const [inputChar, setInputChar] = useState('')
   const [time, setTime] = useState(0);
   const [counter, setCounter] = useState(0);
+  const [running, setRunning] = useState(false);
 
   useEffect(() => {
-  if (counter <= 0) return;
+  if (!running || counter <= 0) return;
 
   const interval = setInterval(() => {
     setCounter((prev) => {
@@ -24,7 +25,7 @@ const Page = () => {
   }, 1000);
 
   return () => clearInterval(interval);
-}, [counter]);
+}, [counter, running]);
 
 
   useEffect(() => {
@@ -55,21 +56,22 @@ const Page = () => {
     <div className="">
       <div className="w-full flex flex-col items-center max-w-7xl mx-auto gap-10">
 
-        {/* Config */}
-        <div className='p-2 bg-base-200 rounded-xl flex flex-col gap-2'>
-          <p className='text-center font-semibold'>Time</p>
-          <form className="filter">
-            <input className="btn btn-square" type="reset" value="×" onClick={()=>{setCounter(0); setTime(0)}}/>
-            <input className="btn" onChange={()=>{setCounter(15); setTime(15)}} type="radio" name="frameworks" aria-label="15"/>
-            <input className="btn" onChange={()=>{setCounter(30); setTime(30)}} type="radio" name="frameworks" aria-label="30"/>
-            <input className="btn" onChange={()=>{setCounter(60); setTime(60)}} type="radio" name="frameworks" aria-label="60"/>
-          </form>
-        </div>
 
-        {/* For TSX uncomment the commented types below */}
-        <span className="countdown font-mono text-6xl">
-          <span style={{"--value": counter, "--digits":2}  as React.CSSProperties  } aria-live="polite" aria-label={counter.toString()}></span>
-        </span>
+        {running ? (
+          <span className="countdown font-mono text-6xl">
+            <span style={{"--value": counter, "--digits":2}  as React.CSSProperties  } aria-live="polite" aria-label={counter.toString()}></span>
+          </span>
+        ):(
+          <div className='p-2 bg-base-200 rounded-xl flex flex-col gap-2'>
+            <p className='text-center font-semibold'>Time</p>
+            <form className="filter">
+              <input className="btn btn-square" type="reset" value="×" onClick={()=>{setCounter(0); setTime(0); setRunning(false)}}/>
+              <input className="btn" onChange={()=>{setCounter(15); setTime(15); setRunning(false)}} type="radio" name="frameworks" aria-label="15"/>
+              <input className="btn" onChange={()=>{setCounter(30); setTime(30); setRunning(false)}} type="radio" name="frameworks" aria-label="30"/>
+              <input className="btn" onChange={()=>{setCounter(60); setTime(60); setRunning(false)}} type="radio" name="frameworks" aria-label="60"/>
+            </form>
+          </div>
+        )}
 
         {/* Target text */}
         <div className='max-w-7xl mx-auto h-auto'>
@@ -83,7 +85,14 @@ const Page = () => {
         {/* INPUT */}
         <div className='w-full flex flex-col gap-5'>
           <p className='text-secondary text-lg'>Type here</p>
-          <textarea disabled={counter === 0} value={inputChar} onChange={e=>setInputChar(e.target.value)} className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
+
+
+          <textarea disabled={counter === 0} value={inputChar} onChange={e=>{
+            if (!running && counter > 0) setRunning(true);
+            setInputChar(e.target.value)}
+            } className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
+
+
           {counter === 0 && <p className='w-full text-center'>Choose your time before typing</p>}
         </div>
         
