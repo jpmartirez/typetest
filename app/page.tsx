@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react'
 const Page = () => {
   const [words, setWords] = useState('')
   const [inputChar, setInputChar] = useState('')
+  const [start, setStart] = useState(false);
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     setWords(faker.word.words(40))
@@ -17,17 +19,29 @@ const Page = () => {
     return 'text-red-500';
   }
 
+  const calculate = () => {
+    const length  = words.length;
+    let count = 0
+
+    for (let i = 0; i < length; i++ ) if (words[i] === inputChar[i]) count++;
+    
+    console.log(count)
+    console.log
+
+  }
+
   return (
     <div className="">
       <div className="w-full flex flex-col items-center max-w-7xl mx-auto gap-10">
 
         {/* Config */}
-        <div className='p-2 bg-base-200 rounded-xl'>
+        <div className='p-2 bg-base-200 rounded-xl flex flex-col gap-2'>
+          <p className='text-center font-semibold'>Time</p>
           <form className="filter">
-            <input className="btn btn-square" type="reset" value="×"/>
-            <input className="btn" type="radio" name="frameworks" aria-label="15"/>
-            <input className="btn" type="radio" name="frameworks" aria-label="30"/>
-            <input className="btn" type="radio" name="frameworks" aria-label="60"/>
+            <input className="btn btn-square" type="reset" value="×" onClick={()=>setTime(0)}/>
+            <input className="btn" onChange={()=>setTime(15)} type="radio" name="frameworks" aria-label="15"/>
+            <input className="btn" onChange={()=>setTime(30)} type="radio" name="frameworks" aria-label="30"/>
+            <input className="btn" onChange={()=>setTime(60)} type="radio" name="frameworks" aria-label="60"/>
           </form>
         </div>
 
@@ -43,7 +57,8 @@ const Page = () => {
         {/* INPUT */}
         <div className='w-full flex flex-col gap-5'>
           <p className='text-secondary text-lg'>Type here</p>
-          <textarea value={inputChar} onChange={e=>setInputChar(e.target.value)} className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
+          <textarea disabled={time === 0} value={inputChar} onChange={e=>setInputChar(e.target.value)} className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
+          {time === 0 && <p className='w-full text-center'>Choose your time before typing</p>}
         </div>
 
         
