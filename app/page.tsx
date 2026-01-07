@@ -6,11 +6,29 @@ import { useEffect, useState } from 'react'
 const Page = () => {
   const [words, setWords] = useState('')
   const [inputChar, setInputChar] = useState('')
-  const [start, setStart] = useState(false);
   const [time, setTime] = useState(0);
+  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    setWords(faker.word.words(40))
+  if (counter <= 0) return;
+
+  const interval = setInterval(() => {
+    setCounter((prev) => {
+      if (prev <= 1) {
+        clearInterval(interval);
+        calculate(); // run result calculation when counter ends
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [counter]);
+
+
+  useEffect(() => {
+    setWords(faker.word.words(50))
   }, [])
 
   const getCharClass = (char: string, index: number) => {
@@ -20,13 +38,16 @@ const Page = () => {
   }
 
   const calculate = () => {
-    const length  = words.length;
+
+    const originalWords = words.split(' ');
+    const inputWords = inputChar.split(' ');
+
     let count = 0
 
-    for (let i = 0; i < length; i++ ) if (words[i] === inputChar[i]) count++;
+    for (let i = 0; i < 50; i++ ) if (originalWords[i] === inputWords[i]) count++;
     
     console.log(count)
-    console.log
+    console.log(count/(time/60))
 
   }
 
@@ -38,12 +59,17 @@ const Page = () => {
         <div className='p-2 bg-base-200 rounded-xl flex flex-col gap-2'>
           <p className='text-center font-semibold'>Time</p>
           <form className="filter">
-            <input className="btn btn-square" type="reset" value="×" onClick={()=>setTime(0)}/>
-            <input className="btn" onChange={()=>setTime(15)} type="radio" name="frameworks" aria-label="15"/>
-            <input className="btn" onChange={()=>setTime(30)} type="radio" name="frameworks" aria-label="30"/>
-            <input className="btn" onChange={()=>setTime(60)} type="radio" name="frameworks" aria-label="60"/>
+            <input className="btn btn-square" type="reset" value="×" onClick={()=>{setCounter(0); setTime(0)}}/>
+            <input className="btn" onChange={()=>{setCounter(15); setTime(15)}} type="radio" name="frameworks" aria-label="15"/>
+            <input className="btn" onChange={()=>{setCounter(30); setTime(30)}} type="radio" name="frameworks" aria-label="30"/>
+            <input className="btn" onChange={()=>{setCounter(60); setTime(60)}} type="radio" name="frameworks" aria-label="60"/>
           </form>
         </div>
+
+        {/* For TSX uncomment the commented types below */}
+        <span className="countdown font-mono text-6xl">
+          <span style={{"--value": counter, "--digits":2}  as React.CSSProperties  } aria-live="polite" aria-label={counter.toString()}></span>
+        </span>
 
         {/* Target text */}
         <div className='max-w-7xl mx-auto h-auto'>
@@ -57,10 +83,9 @@ const Page = () => {
         {/* INPUT */}
         <div className='w-full flex flex-col gap-5'>
           <p className='text-secondary text-lg'>Type here</p>
-          <textarea disabled={time === 0} value={inputChar} onChange={e=>setInputChar(e.target.value)} className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
-          {time === 0 && <p className='w-full text-center'>Choose your time before typing</p>}
+          <textarea disabled={counter === 0} value={inputChar} onChange={e=>setInputChar(e.target.value)} className="textarea textarea-secondary w-full text-3xl font-bold h-50"></textarea>
+          {counter === 0 && <p className='w-full text-center'>Choose your time before typing</p>}
         </div>
-
         
       </div>
     </div>
