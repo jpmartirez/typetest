@@ -12,28 +12,6 @@ const Page = () => {
   const [result, setResult] = useState(0)
   const [showModal, setShowModal] = useState(false)
 
-  useEffect(() => {
-  if (!running || counter <= 0) return;
-
-  const interval = setInterval(() => {
-    setCounter((prev) => {
-      if (prev <= 1) {
-        clearInterval(interval);
-        calculate(); // run result calculation when counter ends
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
-
-  return () => clearInterval(interval);
-}, [counter, running]);
-
-
-  useEffect(() => {
-    setWords(faker.word.words(50))
-  }, [])
-
   const getCharClass = (char: string, index: number) => {
     if (!inputChar[index]) return 'text-gray-400';
     if (inputChar[index] === char) return 'text-green-400';
@@ -66,6 +44,27 @@ const Page = () => {
     setResult(0);
     setShowModal(false);
   }
+
+  useEffect(() => {
+    setWords(faker.word.words(50))
+  }, [])
+
+  useEffect(() => {
+    if (!running || counter <= 0) return;
+
+    const interval = setInterval(() => {
+      setCounter((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          calculate(); // run result calculation when counter ends
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [counter, running]);
 
   return (
     <div className="">
